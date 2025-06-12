@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="estilo.css" />
+
+</head>
+<body>
+    <header>
+      <ul class="nav-links">
+         <nav class="navbar">
+    <img src="./img/Logo_Cesde.jpg" alt="Logo" class="logo">
+  </nav>
+        <li><a href="./portal.html">🏠 Inicio</a></li>
+        <li><a href="base.html">🔐 Base de Datos </a></li>
+        <li><a href="logica.html">⚙️ Logica de Programacion </a></li>
+ 
+      </ul>
+      
+    </nav>
+  </header>
+<center>
+  <br>
+<h2>Algoritmo registro de notas de estudiantes</h2> <br></br>
+
+<img src="./img/Log1.jpeg" height="600px" width="1000px"><br><br>
+<img src="./img/Log 2.jpeg" height="600px" width="1000px"alt=""><br><br>
+
+<h2>Resultados</h2> <br>
+<img src="./img/Log 3.jpeg" height="600px" width="1000px" alt="">
+<br><br>
+
+</center>
+<section id="registro-notas">
+  <h2>Registro de Notas</h2>
+  <form id="formulario">
+    <label for="numEstudiantes">Cantidad de estudiantes:</label>
+    <input type="number" id="numEstudiantes" required><br><br>
+
+    <label for="numMaterias">Cantidad de materias:</label>
+    <input type="number" id="numMaterias" required><br><br>
+
+    <button type="button" onclick="generarFormulario()">Continuar</button>
+  </form>
+
+  <div id="datosNotas"></div>
+  <div id="resultados"></div>
+</section>
+
+<script>
+  function generarFormulario() {
+    const numEstudiantes = parseInt(document.getElementById('numEstudiantes').value);
+    const numMaterias = parseInt(document.getElementById('numMaterias').value);
+    const contenedor = document.getElementById('datosNotas');
+    contenedor.innerHTML = '';
+
+    const form = document.createElement('form');
+    form.id = 'notasForm';
+
+    // Materias
+    const tituloMat = document.createElement('h3');
+    tituloMat.textContent = 'Ingrese los nombres de las materias';
+    form.appendChild(tituloMat);
+
+    for (let m = 0; m < numMaterias; m++) {
+      const input = document.createElement('input');
+      input.placeholder = 'Materia ' + (m + 1);
+      input.name = 'materia' + m;
+      input.required = true;
+      form.appendChild(input);
+      form.appendChild(document.createElement('br'));
+    }
+
+    // Estudiantes y notas
+    const tituloEst = document.createElement('h3');
+    tituloEst.textContent = 'Ingrese los nombres de los estudiantes y sus calificaciones';
+    form.appendChild(tituloEst);
+
+    for (let e = 0; e < numEstudiantes; e++) {
+      const nombre = document.createElement('input');
+      nombre.placeholder = 'Nombre del estudiante ' + (e + 1);
+      nombre.name = 'estudiante' + e;
+      nombre.required = true;
+      form.appendChild(nombre);
+      form.appendChild(document.createElement('br'));
+
+      for (let m = 0; m < numMaterias; m++) {
+        const nota = document.createElement('input');
+        nota.type = 'number';
+        nota.placeholder = `Nota en Materia ${m + 1}`;
+        nota.name = `nota_${e}_${m}`;
+        nota.step = '0.1';
+        nota.min = '0';
+        nota.max = '5';
+        nota.required = true;
+        form.appendChild(nota);
+      }
+      form.appendChild(document.createElement('br'));
+    }
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Calcular Resultados';
+    btn.type = 'button';
+    btn.onclick = calcularResultados;
+    form.appendChild(btn);
+
+    contenedor.appendChild(form);
+  }
+
+  function calcularResultados() {
+    const numEstudiantes = parseInt(document.getElementById('numEstudiantes').value);
+    const numMaterias = parseInt(document.getElementById('numMaterias').value);
+    const form = document.getElementById('notasForm');
+    const resultados = document.getElementById('resultados');
+    resultados.innerHTML = '<h3>Reporte de Calificaciones</h3>';
+
+    // Leer nombres de materias
+    const materias = [];
+    for (let m = 0; m < numMaterias; m++) {
+      materias.push(form[`materia${m}`].value);
+    }
+
+    for (let e = 0; e < numEstudiantes; e++) {
+      const nombre = form[`estudiante${e}`].value;
+      let promedio = 0;
+      let detalles = `<strong>${nombre}</strong><ul>`;
+
+      for (let m = 0; m < numMaterias; m++) {
+        const nota = parseFloat(form[`nota_${e}_${m}`].value);
+        promedio += nota;
+        detalles += `<li>${materias[m]}: ${nota}</li>`;
+      }
+
+      promedio /= numMaterias;
+      detalles += `</ul>Promedio: ${promedio.toFixed(2)}<br>`;
+      detalles += promedio >= 3 ? 'Estado: <span style="color:green">APROBADO ✅</span><br><br>' :
+                                  'Estado: <span style="color:red">REPROBADO ❌</span><br><br>';
+
+      const divEstudiante = document.createElement('div');
+      divEstudiante.innerHTML = detalles;
+      resultados.appendChild(divEstudiante);
+    }
+  }
+</script>
+
+
+<footer>
+    <p>Conéctate con nosotros</p>
+    <div class="social-icons">
+      <img src="./img/Footer.png" alt="" width="100%">
+    </div>
+  </footer>
+</body>
+</html>
